@@ -1,4 +1,5 @@
+import java.util.LinkedList;
 
-public class GEL {
+public class GEL extends LinkedList{
 
 }
