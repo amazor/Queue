@@ -1,8 +1,8 @@
 
 public class DepartureEvent extends Event{
 	
-	public DepartureEvent(){
-		setEventTime(0);
+	public DepartureEvent(int time){
+		setEventTime(time);
 	}
 
 }

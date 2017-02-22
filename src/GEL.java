@@ -2,7 +2,7 @@ import java.util.LinkedList;
 
 public class GEL {
 	
-LinkedList<Event> list;
+private LinkedList<Event> list;
 
 public GEL(){
 	 list = new LinkedList<Event>();
