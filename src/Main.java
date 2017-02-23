@@ -12,6 +12,10 @@ public class Main {
 	/** Number of packets in buffer**/
 	static int length;
 	
+	static final int MaxBuffer = 1;
+	
+	static Buffer buffer;
+	
 	public static void main(String[] args) {
 		initialize();
 		for (int i = 0; i< 100000; i++){
@@ -30,6 +34,7 @@ public class Main {
 		time = 0;
 		length = 0;
 		gel.insert(new ArrivalEvent(time));
+		buffer = new Buffer(MaxBuffer);
 		//initialize counters for statistics
 		
 		
@@ -55,31 +60,47 @@ public class Main {
    be placed in the right place so that the events are ordered
    in time.  
 	 */
-	private static void processArrival() {
+	private static void processArrival() { //NEED TO IMPLEMENT STATITICS
 		ArrivalEvent currentEvent = (ArrivalEvent)(currEvent);
 		
 		time = currentEvent.getEventTime();  //update current time
 		gel.insert(new ArrivalEvent(time)); //insert next arrival event
 		
-		if (length == 0){ //if buffer is empty / server is free
-			length++;
-			//insert new Departure event at the processing time for this arrival event
-			gel.insert(new DepartureEvent(currentEvent.getProcessingTime()));
-		} else if(Buffer.MAX_BUFFER < 0){ //infinite buffer
-			length++;
-		} else if (length-1 < Buffer.MAX_BUFFER && length > 0  ){ //if server is busy and buffer available
-			length++;
-		} else { //server is busy and no buffer available
-			//pkt drop
+		try {
+			if(buffer.increment(new Packet()) == 1){ //if server is free
+				length++;
+				new DepartureEvent(time);
+			} else { //if server is busy
+				length++;
+			}
+		} catch (BufferOutOfBoundsException e) { 
+			if(e.getIsBeyondUpperBound()){ // if buffer is full
+				//pktdrop
+			} else { // if you decrement too much
+				e.printStackTrace();
+				System.exit(0);
+			}
+			
 		}
+		
+
 	}
 	
 	private static void processDeparture() {
 		DepartureEvent currentEvent = (DepartureEvent)(currEvent);
 		time = currentEvent.getEventTime();
+		//update stats
+		Packet currPacket;
+		try {
+			buffer.decrement();
+		} catch (BufferOutOfBoundsException e) {
+			e.printStackTrace();
+			System.exit(0);
+		}
 		length--;
 		
-		if (length > 0){
+		if (buffer.getCount() > 0){
+			
 			/*
 			 1. Dequeue the first packet from the buffer;
 			 2. Create a new departure event for a time which is
@@ -88,7 +109,13 @@ public class Main {
 			 3. Insert the event at the right place in the GEL. 
 			 */
 			
-			gel.insert(new DepartureEvent(time));
+			try {
+				currPacket = buffer.decrement();
+			} catch (BufferOutOfBoundsException e) {
+				e.printStackTrace();
+				System.exit(0);
+			}
+			gel.insert(new DepartureEvent(time + currPacket.getServiceTime()));
 		}
 
 		
