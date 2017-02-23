@@ -15,14 +15,10 @@ public class ArrivalEvent extends Event {
 	}
 	
 	
-	private double randArrival(){
-		/*double negative-exponenetially-distributed-time(double rate){
-     		double u;
-     		u = drand48();
-     		return ((-1/rate)*log(1-u));*/
-		
-		double u = 0;
-		return u;
+	private double randArrival{
+		double lambda = 0.1;
+		double u = rand.nextDouble();
+		return ((-1/lambda)*Math.log(1-u));
 	}
 
 }
