@@ -40,26 +40,6 @@ public class Main {
 		
 	}
 	
-	
-	/* 
-	 1.
-  Find the time of the next arrival, which is the current time 
-  (which is maintained by the time variable) plus a randomly 
-  generated time drawn from a negative exponentially distributed
-   random variable with rate λ.
-	 2.
-  Create a new packet and determine its service time which is
-   a randomly generated time drawn from a negative exponentially
-   distributed random variable with rate μ.
-    
-	 3.
-  	Create the new arrival event.   
-	 4.
-  Insert the event into the event list. Note that there can be
-   other events in the event list. The newly created event must
-   be placed in the right place so that the events are ordered
-   in time.  
-	 */
 	private static void processArrival() { //NEED TO IMPLEMENT STATITICS
 		ArrivalEvent currentEvent = (ArrivalEvent)(currEvent);
 		
@@ -99,16 +79,7 @@ public class Main {
 		}
 		length--;
 		
-		if (buffer.getCount() > 0){
-			
-			/*
-			 1. Dequeue the first packet from the buffer;
-			 2. Create a new departure event for a time which is
- 				the current time plus the time to transmit the 
-				packet.  
-			 3. Insert the event at the right place in the GEL. 
-			 */
-			
+		if (buffer.getCount() > 0){	
 			try {
 				currPacket = buffer.decrement();
 				gel.insert(new DepartureEvent(time + currPacket.getServiceTime()));
@@ -120,9 +91,6 @@ public class Main {
 
 		
 	}
-
-
-
 	private static void outputStatistics(){
 		
 	}
