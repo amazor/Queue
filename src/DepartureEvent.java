@@ -14,10 +14,4 @@ public class DepartureEvent extends Event{
 		eventTime = time;
 	}	
 	
-	/*private double randDepart{
-		double u = 0;
-		return u;
-	}*/
-	
-	
 }
