@@ -6,7 +6,7 @@ public class DepartureEvent extends Event{
 		setDepartTime(currTime + randDepart());
 	}
 
-	public int getDepartTime(){
+	public double getDepartTime(){
 		return eventTime;
 	}
 	
