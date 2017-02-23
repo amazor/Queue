@@ -6,13 +6,10 @@ public class Packet {
 	
 	/** Create Random Distribution**/
 	private static Random packetRand = new Random();
-	double mu = 1;
 
 	
 	public Packet (){
-	double u = packetRan.nextDouble();
-	serviceTime = ((-1/mu)*Math.log(1-u)); 
-		
+	serviceTime = randService();
 	}
 
 	public Packet (double serviceTime){
@@ -21,6 +18,13 @@ public class Packet {
 	
 	public double getServiceTime(){
 		return serviceTime;
+	}
+	
+	
+	private double randService(){
+		double mu = 1;
+		double u = rand.nextDouble();
+		return ((-1/mu)*Math.log(1-u));
 	}
 
 }
