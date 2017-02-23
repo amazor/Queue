@@ -1,6 +1,6 @@
 
 public abstract class Event {
-	private double eventTime = 0;
+	protected double eventTime = 0;
 	
 	public double getEventTime(){
 		return eventTime;

@@ -7,7 +7,7 @@ public class Main {
 	static Event currEvent;
 	
 	/** Current Time of Program **/
-	static int time;
+	static double time;
 	
 	/** Number of packets in buffer**/
 	static int length;
@@ -111,11 +111,11 @@ public class Main {
 			
 			try {
 				currPacket = buffer.decrement();
+				gel.insert(new DepartureEvent(time + currPacket.getServiceTime()));
 			} catch (BufferOutOfBoundsException e) {
 				e.printStackTrace();
 				System.exit(0);
 			}
-			gel.insert(new DepartureEvent(time + currPacket.getServiceTime()));
 		}
 
 		

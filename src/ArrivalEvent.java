@@ -4,7 +4,6 @@ public class ArrivalEvent extends Event {
 	
 	public ArrivalEvent(double currTime){
 		setArrivalTime(currTime + randArrival());
-		
 	}
 	
 	public double getArrivalTime(){
@@ -16,7 +15,7 @@ public class ArrivalEvent extends Event {
 	}
 	
 	
-	private double randArrival{
+	private double randArrival(){
 		/*double negative-exponenetially-distributed-time(double rate){
      		double u;
      		u = drand48();
