@@ -14,9 +14,13 @@ public class Buffer {
 	
 	public int increment(Packet packet) throws BufferOutOfBoundsException{
 		counter++;
-		packets.add(packet);
-		if(MAX_BUFFER > 0 && counter > MAX_BUFFER)
-			throw new BufferOutOfBoundsException(counter + " > " + MAX_BUFFER, true);
+		if(MAX_BUFFER > 0 && counter > MAX_BUFFER){
+			counter--;
+			throw new BufferOutOfBoundsException(counter+1 + " > " + MAX_BUFFER, true);
+		} else{ 
+			packets.add(packet);
+		}
+	
 		return counter;
 	}
 	
@@ -24,9 +28,11 @@ public class Buffer {
 		counter--;
 		if(counter < 0)
 			throw new BufferOutOfBoundsException(counter + " < 0", false);
-		
-
 		return packets.poll();
+	}
+	
+	public Packet peek(){
+		return packets.peek();
 	}
 	
 	public int getCount(){

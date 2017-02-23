@@ -11,7 +11,7 @@ public GEL(){
 public void insert(Event e){
 	int index = 0;
 	for(Event currEvent: list){
-		if (currEvent.getEventTime() < e.getEventTime()){
+		if (currEvent.getEventTime() > e.getEventTime()){
 			list.add(index, e);
 			return;
 		}

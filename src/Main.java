@@ -1,24 +1,31 @@
 
 public class Main {
+	
+	static final int MaxBuffer = 4;
+	
 	/** EventList **/
 	static GEL gel;
 	
-	/** The current event being looked at **/
-	static Event currEvent;
+	/** main buffer **/
+	static Buffer buffer;
 	
 	/** Current Time of Program **/
 	static double time;
 	
+	/** The current event being looked at **/
+	static Event currEvent;
+	
+	
 	/** Number of packets in buffer**/
 	static int length;
 	
-	static final int MaxBuffer = 1;
+	static int numPktsDropped = 0;
 	
-	static Buffer buffer;
+	
 	
 	public static void main(String[] args) {
 		initialize();
-		for (int i = 0; i< 10; i++){
+		for (int i = 0; i< 100000; i++){
 			currEvent = gel.pop();
 			if(currEvent instanceof ArrivalEvent)// pop the GEL and use instanceof
 				processArrival();
@@ -57,8 +64,8 @@ public class Main {
 			}
 		} catch (BufferOutOfBoundsException e) { 
 			if(e.getIsBeyondUpperBound()){ // if buffer is full
-				//pktdrop
-				System.out.println("Packet has been dropped");
+				numPktsDropped++;
+				System.out.println("Packet has been dropped *****************");
 			} else { // if you decrement too much
 				e.printStackTrace();
 				System.exit(0);
@@ -84,19 +91,15 @@ public class Main {
 		length--;
 		
 		if (buffer.getCount() > 0){	
-			try {
-				currPacket = buffer.decrement();
-				gel.insert(new DepartureEvent(time + currPacket.getServiceTime()));
-			} catch (BufferOutOfBoundsException e) {
-				e.printStackTrace();
-				System.exit(0);
-			}
+			currPacket = buffer.peek();
+			gel.insert(new DepartureEvent(time + currPacket.getServiceTime()));
+
 		}
 
 		
 	}
 	private static void outputStatistics(){
-		
+		System.out.println("Number of Packets Dropped: " + numPktsDropped);
 	}
 
 }
