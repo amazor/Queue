@@ -1,8 +1,5 @@
 
 public class Main {
-	/** Create Random Distribution**/
-	Random rand = new Random();
-	
 	/** EventList **/
 	static GEL gel;
 	
