@@ -1,6 +1,6 @@
 
 public class ArrivalEvent extends Event {
-	private double arrivalTime = 0;
+	//private double arrivalTime = 0;
 	
 	public ArrivalEvent(double currTime){
 		setArrivalTime(currTime + randArrival());
