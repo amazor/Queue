@@ -7,12 +7,12 @@ public class ArrivalEvent extends Event {
 		
 	}
 	
-	public int getArrivalTime(){
-		return arrivalTime;
+	public double getArrivalTime(){
+		return eventTime;
 	}
 	
 	public void setArrivalTime(double time){
-		arrivalTime = time;
+		eventTime = time;
 	}
 	
 	
