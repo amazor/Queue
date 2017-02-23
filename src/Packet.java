@@ -23,7 +23,7 @@ public class Packet {
 	
 	private double randService(){
 		double mu = 1;
-		double u = rand.nextDouble();
+		double u = packetRand.nextDouble();
 		return ((-1/mu)*Math.log(1-u));
 	}
 
