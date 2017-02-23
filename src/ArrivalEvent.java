@@ -7,14 +7,6 @@ public class ArrivalEvent extends Event {
 		
 	}
 	
-	public ArrivalEvent(double currTime, double randTime){
-		//set random times here
-		
-		
-		setArrivalTime(double ArrivalTime);
-	}
-
-	
 	public int getArrivalTime(){
 		return arrivalTime;
 	}
