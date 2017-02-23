@@ -18,7 +18,7 @@ public class Main {
 	
 	public static void main(String[] args) {
 		initialize();
-		for (int i = 0; i< 100000; i++){
+		for (int i = 0; i< 10; i++){
 			currEvent = gel.pop();
 			if(currEvent instanceof ArrivalEvent)// pop the GEL and use instanceof
 				processArrival();
@@ -33,6 +33,7 @@ public class Main {
 	private static void initialize(){
 		time = 0;
 		length = 0;
+		gel = new GEL();
 		gel.insert(new ArrivalEvent(time));
 		buffer = new Buffer(MaxBuffer);
 		//initialize counters for statistics
@@ -42,20 +43,22 @@ public class Main {
 	
 	private static void processArrival() { //NEED TO IMPLEMENT STATITICS
 		ArrivalEvent currentEvent = (ArrivalEvent)(currEvent);
-		
 		time = currentEvent.getEventTime();  //update current time
+		System.out.println("Packet has arrived at time: " + time);
 		gel.insert(new ArrivalEvent(time)); //insert next arrival event
 		
 		try {
-			if(buffer.increment(new Packet()) == 1){ //if server is free
+			Packet newPacket = new Packet();
+			if(buffer.increment(newPacket) == 1){ //if server is free
 				length++;
-				new DepartureEvent(time);
+				gel.insert(new DepartureEvent(time + newPacket.getServiceTime()));
 			} else { //if server is busy
 				length++;
 			}
 		} catch (BufferOutOfBoundsException e) { 
 			if(e.getIsBeyondUpperBound()){ // if buffer is full
 				//pktdrop
+				System.out.println("Packet has been dropped");
 			} else { // if you decrement too much
 				e.printStackTrace();
 				System.exit(0);
@@ -73,6 +76,7 @@ public class Main {
 		Packet currPacket;
 		try {
 			buffer.decrement();
+			System.out.println("Packet Departed at time: " + time);
 		} catch (BufferOutOfBoundsException e) {
 			e.printStackTrace();
 			System.exit(0);
