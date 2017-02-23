@@ -5,15 +5,14 @@ public class DepartureEvent extends Event{
 	public DepartureEvent(double currTime){
 		setDepartTime(currTime + randDepart());
 	}
-	
-	public void setDepartTime(double time){
-		eventTime = time;
-	}
-	
 
 	public int getDepartTime(){
 		return eventTime;
 	}
+	
+	public void setDepartTime(double time){
+		eventTime = time;
+	}	
 	
 	private double randDepart{
 		/*double negative-exponenetially-distributed-time(double rate){
