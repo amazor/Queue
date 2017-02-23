@@ -1,8 +1,17 @@
 
 public class DepartureEvent extends Event{
+	//private double departTime = 0;
 	
-	public DepartureEvent(int time){
-		setEventTime(time);
+	public DepartureEvent(double currTime){
+		setDepartTime(currTime);
 	}
 
+	public double getDepartTime(){
+		return eventTime;
+	}
+	
+	public void setDepartTime(double time){
+		eventTime = time;
+	}	
+	
 }

@@ -1,13 +1,13 @@
 
 public abstract class Event {
-	private int eventTime = 0;
+	private double eventTime = 0;
 	
-	public int getEventTime(){
+	public double getEventTime(){
 		return eventTime;
 	}
 	
-	public void setEventTime(int eventTime){
-		this.eventTime = eventTime;
+	public void setEventTime(double time){
+		eventTime = time;
 	}
 
 }

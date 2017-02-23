@@ -1,23 +1,29 @@
 
 public class ArrivalEvent extends Event {
-	private int processingTime = 0;
+	//private double arrivalTime = 0;
 	
-	public ArrivalEvent(int eventTime){
-		//set random times here
+	public ArrivalEvent(double currTime){
+		setArrivalTime(currTime + randArrival());
+		
 	}
 	
-	public ArrivalEvent(int eventTime, int processingTime){
-		//set random times here
-		setProcessingTime(processingTime);
-	}
-
-	
-	public int getProcessingTime(){
-		return processingTime;
+	public double getArrivalTime(){
+		return eventTime;
 	}
 	
-	public void setProcessingTime(int time){
-		processingTime = time;
+	public void setArrivalTime(double time){
+		eventTime = time;
+	}
+	
+	
+	private double randArrival{
+		/*double negative-exponenetially-distributed-time(double rate){
+     		double u;
+     		u = drand48();
+     		return ((-1/rate)*log(1-u));*/
+		
+		double u = 0;
+		return u;
 	}
 
 }
