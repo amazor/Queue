@@ -61,6 +61,7 @@ public class Main {
 			Packet newPacket = new Packet();
 			if(buffer.increment(newPacket) == 1){ //if server is free
 				length++;
+				
 				gel.insert(new DepartureEvent(time + newPacket.getServiceTime()));
 			} else { //if server is busy
 				length++;
@@ -103,6 +104,11 @@ public class Main {
 	}
 	private static void outputStatistics(){
 		System.out.println("Number of Packets Dropped: " + numPktsDropped);
+	}
+	
+	private static void updateQueueStats(double time){
+		
+		
 	}
 
 }
