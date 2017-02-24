@@ -16,9 +16,9 @@ public class ArrivalEvent extends Event {
 		eventTime = time;
 	}
 	
-	
+
 	private double randArrival(){
-		double lambda = 0.1;
+		double lambda = .1;
 		double u = rand.nextDouble();
 		return ((-1/lambda)*Math.log(1-u));
 	}

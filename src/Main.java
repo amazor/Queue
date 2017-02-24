@@ -1,7 +1,7 @@
 
 public class Main {
 	
-	static final int MaxBuffer = 4;
+	static final int MaxBuffer = -1;
 	
 	/** EventList **/
 	static GEL gel;
@@ -21,22 +21,19 @@ public class Main {
 	
 	/** Statistics Variables **/
 	static int numPktsDropped = 0;
-	static int[][] queueLength = new int[10000][2];
-	
+	static Statistics stats;
 	
 	
 	public static void main(String[] args) {
 		initialize();
-		for (int i = 0; i< 100000; i++){
+		for (int i = 0; i< 10000; i++){
 			currEvent = gel.pop();
 			if(currEvent instanceof ArrivalEvent)// pop the GEL and use instanceof
 				processArrival();
 			else
 				processDeparture();
 		}
-	
 		outputStatistics();
-	
 	}
 	
 	private static void initialize(){
@@ -45,14 +42,14 @@ public class Main {
 		gel = new GEL();
 		gel.insert(new ArrivalEvent(time));
 		buffer = new Buffer(MaxBuffer);
-		queueLength[0][0] = 0;
-		//initialize counters for statistics
+		stats = new Statistics();
 		
 		
 	}
 	
 	private static void processArrival() { //NEED TO IMPLEMENT STATITICS
 		ArrivalEvent currentEvent = (ArrivalEvent)(currEvent);
+		double prevTime = time;
 		time = currentEvent.getEventTime();  //update current time
 		System.out.println("Packet has arrived at time: " + time);
 		gel.insert(new ArrivalEvent(time)); //insert next arrival event
@@ -60,15 +57,17 @@ public class Main {
 		try {
 			Packet newPacket = new Packet();
 			if(buffer.increment(newPacket) == 1){ //if server is free
+				stats.add(buffer.getCount()-1, time - prevTime);
 				length++;
-				
 				gel.insert(new DepartureEvent(time + newPacket.getServiceTime()));
 			} else { //if server is busy
+				stats.add(buffer.getCount()-1, time - prevTime);
 				length++;
 			}
 		} catch (BufferOutOfBoundsException e) { 
 			if(e.getIsBeyondUpperBound()){ // if buffer is full
 				numPktsDropped++;
+				stats.add(buffer.getCount(), time - prevTime);
 				System.out.println("Packet has been dropped *****************");
 			} else { // if you decrement too much
 				e.printStackTrace();
@@ -82,10 +81,12 @@ public class Main {
 	
 	private static void processDeparture() {
 		DepartureEvent currentEvent = (DepartureEvent)(currEvent);
+		double prevTime = time;
 		time = currentEvent.getEventTime();
 		//update stats
 		Packet currPacket;
 		try {
+			stats.add(buffer.getCount(), time - prevTime);
 			buffer.decrement();
 			System.out.println("Packet Departed at time: " + time);
 		} catch (BufferOutOfBoundsException e) {
@@ -103,12 +104,12 @@ public class Main {
 		
 	}
 	private static void outputStatistics(){
+		System.out.println();
+		System.out.println("STATISTICS");
 		System.out.println("Number of Packets Dropped: " + numPktsDropped);
+		System.out.println("Mean queue length:" +stats.calcMeanQueueLength(time));
+		System.out.println("Utility Percentage:" +stats.calcUtil(time));
 	}
-	
-	private static void updateQueueStats(double time){
-		
-		
-	}
+
 
 }
