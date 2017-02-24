@@ -15,12 +15,11 @@ public class Main {
 	/** The current event being looked at **/
 	static Event currEvent;
 	
-	
 	/** Number of packets in buffer**/
 	static int length;
 	
+	/** Statistics Variables **/
 	static int numPktsDropped = 0;
-	
 	
 	
 	public static void main(String[] args) {
