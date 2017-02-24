@@ -18,8 +18,11 @@ public class Main {
 	/** Number of packets in buffer**/
 	static int length;
 	
+	
 	/** Statistics Variables **/
 	static int numPktsDropped = 0;
+	static int[][] queueLength = new int[10000][2];
+	
 	
 	
 	public static void main(String[] args) {
@@ -42,6 +45,7 @@ public class Main {
 		gel = new GEL();
 		gel.insert(new ArrivalEvent(time));
 		buffer = new Buffer(MaxBuffer);
+		queueLength[0][0] = 0;
 		//initialize counters for statistics
 		
 		
