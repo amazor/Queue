@@ -1,3 +1,4 @@
+package mm1;
 import java.util.ArrayList;
 
 public class Statistics {

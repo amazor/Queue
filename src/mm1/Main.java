@@ -1,7 +1,8 @@
+package mm1;
 
 public class Main {
 	
-	static final int MaxBuffer = -1;
+	static final int MaxBuffer = 20;
 	
 	/** EventList **/
 	static GEL gel;
@@ -26,7 +27,7 @@ public class Main {
 	
 	public static void main(String[] args) {
 		initialize();
-		for (int i = 0; i< 10000; i++){
+		for (int i = 0; i< 100000; i++){
 			currEvent = gel.pop();
 			if(currEvent instanceof ArrivalEvent)// pop the GEL and use instanceof
 				processArrival();

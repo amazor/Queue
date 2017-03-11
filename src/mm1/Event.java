@@ -1,3 +1,4 @@
+package mm1;
 
 public abstract class Event {
 	protected double eventTime = 0;

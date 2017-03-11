@@ -1,3 +1,4 @@
+package mm1;
 
 public class DepartureEvent extends Event{
 	//private double departTime = 0;

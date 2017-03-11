@@ -1,3 +1,4 @@
+package mm1;
 
 public class BufferOutOfBoundsException extends Exception {	
 	private boolean isBeyondUpperBound;

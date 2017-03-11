@@ -1,3 +1,4 @@
+package mm1;
 import java.util.Random;
 
 public class ArrivalEvent extends Event {
@@ -18,7 +19,7 @@ public class ArrivalEvent extends Event {
 	
 
 	private double randArrival(){
-		double lambda = .1;
+		double lambda = .9;
 		double u = rand.nextDouble();
 		return ((-1/lambda)*Math.log(1-u));
 	}
