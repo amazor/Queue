@@ -1,20 +1,21 @@
 import mm1.*;
 
 public class Host {
+	boolean isRepitition = false;
+	boolean isDIFS;
+	boolean isBackOff;
+	int DIFSCounter;
+	int BackCounter;
 	
-	//bool isRepitition = false;
-	//bool isDIFS;
-	//bool isBackOff;
-	//int DIFS Counter;
-	//int Back Counter;
+	private GEL;
+	private Buffer buff;
 	
-	
-	Buffer buff;
 	public Host(){
 		buff = new Buffer(-1);
 	}
 	
-	Host.tick(){
+	
+	public void tick(){
 	/*
 	 * 	Push the tick to the GEL to let the Host's Buffer know if there's any new arrivals 
 	 *		{Inside the GEL if tick time == an arrival time, send an arrival to buffer}
