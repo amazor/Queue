@@ -35,7 +35,13 @@ public class Frame extends Packet {
 	private int randomSize(){
 		double lambda = .1;    
 		double u = randF.nextDouble();
-		return (int)((-1/lambda)*Math.log(1-u)) + 64;  // The 64 is just there as a base so it's larger than an ACK
+		int g = (int)((-1/lambda)*Math.log(1-u));
+		
+		if (g < 0;) 
+			g = 1;
+		if (g > 1544)
+		    	g = 1544; 
+		return  g; // The 64 is just there as a base so it's larger than an ACK
 	}
 	
 
