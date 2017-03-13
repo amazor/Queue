@@ -12,7 +12,6 @@ public class Frame extends Packet {
 		super();
 		srcHost = srcHostID;
 		destHost = DestHostID;
-		//randomsize	
 		size = randomSize();	
 	}
 	public void setSize(int newSize){

@@ -80,6 +80,7 @@ public class Host {
 	}
 	
 	private void sendFrame() {
+		System.out.println("Frame sent");
 		isWaitingTimeout = true;
 		initTimeout();
 		try {

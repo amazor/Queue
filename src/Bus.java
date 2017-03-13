@@ -42,8 +42,5 @@ public class Bus extends Buffer{
 		Frame frame = popFrame();
 		hosts[frame.getDestID()].recieveFrame(frame);
 		}
-	
-	
-	
 
 }
