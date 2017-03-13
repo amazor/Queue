@@ -5,7 +5,7 @@ public class Frame extends Packet {
 	private int srcHost;
 	private int destHost;
 	private int FrameIDNum;
-	private int size;
+	private int size;					//THIS IS IN BYTES!
 	private static Random randF = new Random();
 	
 	public Frame(int srcHostID, int DestHostID){
