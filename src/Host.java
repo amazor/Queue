@@ -20,11 +20,19 @@ public class Host {
 	private Buffer buff;
 	private Buffer ackBuffer;
 	
+<<<<<<< HEAD
 	int tickCounter = 0;
 	int ptr = 0;
 	private Queue<Packet> arrivals;
 	private double[] arrivalEvents;
 	private static Random rand = new Random();
+=======
+	
+	int tickCounter = 0;
+	int ptr = 0;
+	private double[] arrivalEvents;
+	private Random rand = new Random();
+>>>>>>> 7d04cf9a7502e392f31732b92c55ffe7f6a9eb18
 	
 	public void tick() throws BufferOutOfBoundsException{
 		tickCounter ++;
@@ -93,6 +101,7 @@ public class Host {
 		repetitionCount = 0;
 		
 		//Made it an array after all, so we could have a record of when items were added to the Buffer
+<<<<<<< HEAD
 		arrivalEvents = new double[(int) (1.5*Main.SIM_TIME)];    // The size of this array determines the total number of Events that will ever occur
 		arrivalEvents[0] = randomArrival()*1000/Main.DEFINITION;
 		for(int index = 1; index < arrivalEvents.length; index++){ 
@@ -101,13 +110,26 @@ public class Host {
 	}
 	
 	private static double randomArrival(){
+=======
+		arrivalEvents = new double[1.5*SIM_TIME];    // The size of this array determines the total number of Events that will ever occur
+		arrivalEvents[0] = randomArrival()*1000/(DEFINITION);
+		for(int index = 1; index < arrivalEvents.length; index++){ 
+			arrivalEvents[index] = arrivalEvents[index-1] + randArrival();
+		}
+	}
+	
+	private static double randomomArrival(){
+>>>>>>> 7d04cf9a7502e392f31732b92c55ffe7f6a9eb18
 		double lambda = .9;        //As Lambda increases the time between arrivals decreases
 		double u = rand.nextDouble();
 		return ((-1/lambda)*Math.log(1-u));
 	}
 	
 	
+<<<<<<< HEAD
 
+=======
+>>>>>>> 7d04cf9a7502e392f31732b92c55ffe7f6a9eb18
 	public boolean isFrameToSend(){
 		return buff.getCount() != 0;
 	}
