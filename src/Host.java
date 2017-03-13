@@ -92,12 +92,19 @@ public class Host {
 		repetitionCount = 0;
 		
 		//Made it an array after all, so we could have a record of when items were added to the Buffer
-		arrivalEvents = new double[40];    // The size of this array determines the total number of Events that will ever occur
-		arrivalEvents[0] = randArrival();
+		arrivalEvents = new double[1.5*SIM_TIME];    // The size of this array determines the total number of Events that will ever occur
+		arrivalEvents[0] = randomArrival()*1000/(DEFINITION);
 		for(int index = 1; index < arrivalEvents.length; index++){ 
 			arrivalEvents[index] = arrivalEvents[index-1] + randArrival();
 		}	
 	}
+	
+	private static double randomomArrival(){
+		double lambda = .9;        //As Lambda increases the time between arrivals decreases
+		double u = rand.nextDouble();
+		return ((-1/lambda)*Math.log(1-u));
+	}
+	
 	
 
 	public boolean isFrameToSend(){
