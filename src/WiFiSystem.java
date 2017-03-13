@@ -6,8 +6,11 @@ public class WiFiSystem {
 	
 	public WiFiSystem(int numHosts, double speed){
 		this.numHosts = numHosts;
-		hosts = new Host[numHosts];
 		bus = new Bus(speed);
+		hosts = new Host[numHosts];
+		for(int i = 0; i < numHosts; i++){
+			hosts[i] = new Host(bus);
+		}
 	}
 	
 	public void tick(){

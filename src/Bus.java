@@ -4,11 +4,13 @@ import mm1.BufferOutOfBoundsException;
 public class Bus extends Buffer{
 	int busyCountdown;
 	double capacity;
+	private Host[] hosts;
 
-	public Bus(double capacity) {
+	public Bus(Host[] hosts, double capacity) {
 		super(1);
 		busyCountdown = 0;
 		this.capacity = capacity;
+		this.hosts = hosts;
 	}
 	
 	public boolean isIdle(){
@@ -22,10 +24,9 @@ public class Bus extends Buffer{
 	public void tick(){
 		if(isBusy()){
 			busyCountdown--;
-		}
-		
-		if(busyCountdown == 0){
-			
+			if(busyCountdown == 0){
+				sendPacket();
+			}
 		}
 	}
 	
@@ -37,6 +38,10 @@ public class Bus extends Buffer{
 	public Frame popFrame() throws BufferOutOfBoundsException{
 		return (Frame)(super.decrement());
 	}
+	private void sendPacket() throws BufferOutOfBoundsException{
+		Frame frame = popFrame();
+		hosts[frame.getDestID()].recieveFrame(frame);
+		}
 	
 	
 	

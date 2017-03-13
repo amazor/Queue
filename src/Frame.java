@@ -12,9 +12,18 @@ public class Frame extends Packet {
 		destHost = DestHostID;
 		//randomsize	
 	}
-	
+	public void setSize(int newSize){
+		size = newSize;
+	}
 	public int getSize(){
 		return size;
+	}
+
+	public int getDestID() {
+		return destHost;
+	}
+	public int getSrcID(){
+		return srcHost;
 	}
 
 }
