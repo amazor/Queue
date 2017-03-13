@@ -36,7 +36,7 @@ public class Frame extends Packet {
 		double lambda = .1;    
 		double u = randF.nextDouble();
 		int g = (int)((-1/lambda)*Math.log(1-u));
-		if (g < 0){ 
+		if (g < 1){ 
 			g = 1;}
 		else if (g > 1544){
 		    	g = 1544; }
