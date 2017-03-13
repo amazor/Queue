@@ -37,7 +37,7 @@ public class Frame extends Packet {
 		double u = randF.nextDouble();
 		int g = (int)((-1/lambda)*Math.log(1-u));
 		if (g < 0){ 
-				g = 1;}
+			g = 1;}
 		else if (g > 1544){
 		    	g = 1544; }
 		return  g; // The 64 is just there as a base so it's larger than an ACK
