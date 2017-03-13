@@ -5,12 +5,14 @@ public class Host {
 	boolean isDIFS;
 	boolean isBackOff;
 	private boolean isWaitingTimeout;
+	
 
-
-	int DIFSCounter;
-	int BackCounter;
-	private int SIFSCounter;
-	private int timeoutCounter;
+	int DIFSCounter = 0;		//DIFS to TICKS
+ 	int BackCounter = 0;
+	private static int T = 5;    //Vary T in the random backoff algorithm to find out the effect of T on throughput and average network delay by keeping λ constant.
+	
+	private int SIFSCounter = 0;   //SIFS to TICKS
+	private int timeoutCounter = 0;  //Set this to Largest Pckt + DIFS + SIFS   
 	
 	private Bus sharedBus;
 	private GEL gel;
@@ -49,6 +51,8 @@ public class Host {
 				} else { // it is the first instance
 					if(sharedBus.isIdle()){
 						isDIFS = true;
+						
+						// Set the DIFS counter here in TICKS
 					}
 				}
 			}
@@ -87,8 +91,8 @@ public class Host {
 
 
 	private void initTimeout() {
-		// TODO Auto-generated method stub
-		
+		timeoutCounter = 120;  //120 = 1544*8/(11*10)
+		//timeoutCounter = timeourCounter + DIFS + SIFS; 
 	}
 
 
@@ -103,8 +107,13 @@ public class Host {
 
 
 	public void initBackoffCounter(){
+		
 		//needs to implement repetitioncounter
 		//needs to implement backoff time from distrinution
+		
+		//This right now will just be in Seconds, convert to TICKS later
+		
+		
 	}
 
 
