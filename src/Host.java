@@ -18,6 +18,12 @@ public class Host {
 	private Buffer buff;
 	private Buffer ackBuffer;
 	
+	
+	int tickCounter = 0;
+	int ptr = 0;
+	private double[] arrivalEvents;
+	private Random rand = new Random();
+	
 	public void tick() throws BufferOutOfBoundsException{
 		if(isDIFS){ // is it waiting on DIFS
 			DIFSCounter--;
@@ -71,9 +77,22 @@ public class Host {
 		ackBuffer = new Buffer(-1);
 		sharedBus = bus;
 		repetitionCount = 0;
+		
+		//Made it an array after all, so we could have a record of when items were added to the Buffer
+		arrivalEvents = new double[1.5*SIM_TIME];    // The size of this array determines the total number of Events that will ever occur
+		arrivalEvents[0] = randomArrival()*1000/(DEFINITION);
+		for(int index = 1; index < arrivalEvents.length; index++){ 
+			arrivalEvents[index] = arrivalEvents[index-1] + randArrival();
+		}
 	}
 	
-
+	private static double randomomArrival(){
+		double lambda = .9;        //As Lambda increases the time between arrivals decreases
+		double u = rand.nextDouble();
+		return ((-1/lambda)*Math.log(1-u));
+	}
+	
+	
 	public boolean isFrameToSend(){
 		return buff.getCount() != 0;
 	}
