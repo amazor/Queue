@@ -1,5 +1,7 @@
 import mm1.*;
 
+import java.util.Random;
+
 public class Host {
 	int repetitionCount; //keeps track if there is repetition, and numOfTimeOuts in current Pkt
 	boolean isDIFS;
