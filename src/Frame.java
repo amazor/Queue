@@ -25,5 +25,9 @@ public class Frame extends Packet {
 	public int getSrcID(){
 		return srcHost;
 	}
+	
+	public String toString(){
+		return "Src:" + srcHost + " Dest: " + destHost;
+	}
 
 }

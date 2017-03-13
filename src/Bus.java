@@ -21,7 +21,7 @@ public class Bus extends Buffer{
 		return !isIdle();
 	}
 	
-	public void tick(){
+	public void tick() throws BufferOutOfBoundsException{
 		if(isBusy()){
 			busyCountdown--;
 			if(busyCountdown == 0){

@@ -4,38 +4,31 @@ public class Host {
 	int repetitionCount; //keeps track if there is repetition, and numOfTimeOuts in current Pkt
 	boolean isDIFS;
 	boolean isBackOff;
+	private boolean isWaitingTimeout;
+
+
 	int DIFSCounter;
 	int BackCounter;
+	private int SIFSCounter;
+	private int timeoutCounter;
 	
 	private Bus sharedBus;
 	private GEL gel;
 	private Buffer buff;
 	private Buffer ackBuffer;
-	private int SIFSCounter;
-	private int timeoutCounter;
-	private boolean isWaitingTimeout;
 	
-	public Host(Bus bus){
-		buff = new Buffer(-1);
-		ackBuffer = new Buffer(-1);
-		sharedBus = bus;
-	}
-	
-
-	public boolean isFrameToSend(){
-		return buff.getCount() != 0;
-	}
-	
-	public void tick(){
+	public void tick() throws BufferOutOfBoundsException{
 		if(isDIFS){ // is it waiting on DIFS
 			DIFSCounter--;
 			if (DIFSCounter == 0){
+				isDIFS = false;
 				sendFrame(); // does not pop buff
 			}
 		} else if(isBackOff){ //is it waiting on BackOFF
 			if(sharedBus.isIdle()){
 				BackCounter--;
 				if(BackCounter == 0){
+					isBackOff = false;
 					sendFrame(); //does not pop buff
 				}
 			}
@@ -44,14 +37,15 @@ public class Host {
 			if(timeoutCounter == 0){
 				isWaitingTimeout = false;
 				repetitionCount++;
+				initBackoffCounter();
 				isBackOff = true;
 			}
 		} else { //it is NOT waiting for anything
 			
 			if(isFrameToSend()){ //is there a frame to send
 				if(repetitionCount > 0){ // is it after the first instance o
+					initBackoffCounter();
 					isBackOff = true;
-					calcBackOffTime();
 				} else { // it is the first instance
 					if(sharedBus.isIdle()){
 						isDIFS = true;
@@ -66,44 +60,51 @@ public class Host {
 				sendAck(); //pop the ackBuffer ALWAYS
 			}
 		}
-	/*
-	 * 	Push the tick to the GEL to let the Host's Buffer know if there's any new arrivals 
-	 *		{Inside the GEL if tick time == an arrival time, send an arrival to buffer}
-	 *
-	 *	if Buffer == Empty //turn into an else
-	 		Do Nothing  
-			
-		if Buffer != Empty & (isRep == false)
-			We're doing DIFS
-				Since we're using isRep to determine if it's the first time or not, we can just use Backoff = DIFS
-			isRep = true;
-		
-		if Buffer != Empty & (isRep == true){
-			if (Bus == Idle) {
-				if (Backoff != 0)
-					Dec Back off time by 1
-					
-				else if(Backoff == 0)
-					this.sendFrame();
-					if (Buffer == empty)
-					 	isRep == false;	
-				}
-			if (Bus != Idle)
-				Do nothing
-			}
-	 */
-	
 	
 	}
 
+	public Host(Bus bus){
+		buff = new Buffer(-1);
+		ackBuffer = new Buffer(-1);
+		sharedBus = bus;
+		repetitionCount = 0;
+	}
 	
+
+	public boolean isFrameToSend(){
+		return buff.getCount() != 0;
+	}
+	
+	private void sendFrame() {
+		isWaitingTimeout = true;
+		initTimeout();
+		try {
+			sharedBus.insertFrame((Frame)(buff.peek()));
+		} catch (BufferOutOfBoundsException e) {
+			System.out.println("collison occured with Packet:" + (Frame)(buff.peek()));
+		}
+	}
+
+
+	private void initTimeout() {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	private void sendAck() throws BufferOutOfBoundsException {
+		sharedBus.insertFrame((Ack)(ackBuffer.decrement()));
+	}
+
+
 	private boolean isAckToSend() {
 		return ackBuffer.getCount() != 0;
 	}
 
 
-	public Frame calcBackOffTime(){
-		
+	public void initBackoffCounter(){
+		//needs to implement repetitioncounter
+		//needs to implement backoff time from distrinution
 	}
 
 
@@ -115,10 +116,17 @@ public class Host {
 				repetitionCount = 1;
 			else 
 				repetitionCount = 0;
-		} else {
-			ackBuffer.increment(new Ack(frame.getDestID(), frame.getSrcID));
+		} else { // Receives frame from another host
+			initSIFS();
+			ackBuffer.increment(new Ack(frame.getDestID(), frame.getSrcID()));
 			
 		}
+		
+	}
+
+
+	private void initSIFS() {
+		// TODO Auto-generated method stub
 		
 	}
 }
