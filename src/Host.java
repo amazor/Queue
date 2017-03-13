@@ -34,7 +34,6 @@ public class Host {
 			Frame theFrame = new Frame(ITSOWNNUMBER,(tickCounter % NUM_HOSTS) );
 			buff.increment(theFrame);
 			ptr++;
-		
 		}
 		
 		
