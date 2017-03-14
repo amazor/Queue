@@ -35,7 +35,7 @@ public class Frame extends Packet {
 	private int randomSize(){		//REMBER THIS IS IN BYTES
 		double lambda = .1;    
 		double u = randF.nextDouble();
-		int g = (int)((-1/lambda)*Math.log(1-u));
+		int g = (int)((-1/Main.LAMBDA)*Math.log(1-u));
 		if (g < 1){ 
 			g = 1;}
 		else if (g > 1544){
