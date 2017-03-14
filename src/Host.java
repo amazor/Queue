@@ -20,6 +20,7 @@ public class Host {
 	private Bus sharedBus;
 	private Buffer buff;
 	private Buffer ackBuffer;
+	private int lastArrival = 0;
 	
 
 	int tickCounter = 0;
@@ -57,21 +58,25 @@ public class Host {
 			}
 			Frame theFrame = new Frame(hostID,(j));
 			buff.increment(theFrame);
+			
+			
 			ptr++;
+			
+			
 		}
 		
 		
 		
 		if(isDIFS){ // is it waiting on DIFS
 			DIFSCounter--;
-			if (DIFSCounter <= 0){
+			if (DIFSCounter == 0){
 				isDIFS = false;
 				sendFrame(); // does not pop buff
 			}
 		} else if(isBackOff){ //is it waiting on BackOFF
 			if(sharedBus.isIdle()){
 				BackCounter--;
-				if(BackCounter <= 0){
+				if(BackCounter == 0){
 					isBackOff = false;
 					try{
 						sendFrame(); //does not pop buff
@@ -127,24 +132,23 @@ public class Host {
 	
 
 	public boolean isFrameToSend(){
-		return buff.getCount() > 0;
+		return buff.getCount() != 0;
 	}
 	
 	private void sendFrame() throws BufferOutOfBoundsException {
 		System.out.println("Host: " + hostID + " Sent Frame" + buff.peek());
+		isWaitingTimeout = true;
 		initTimeout();
 		try {
 			sharedBus.insertFrame((Frame)(buff.peek()));
-			isWaitingTimeout = true;
+			
+			Main.queueDelay += (tickCounter  - arrivalEvents.get(lastArrival));
+			
 		} catch (BufferOutOfBoundsException e) {
 			System.out.println("collison occured with Packet:" + (Frame)(buff.peek()));
 			throw e;
 		} catch (NullPointerException e ){
 			System.out.println("PROBLEM");
-			System.out.println(isDIFS);
-			System.out.println(isBackOff);
-			System.out.println(isWaitingTimeout);
-			System.out.println(this.isFrameToSend());
 			e.printStackTrace();
 			System.exit(1);
 		}
@@ -166,6 +170,7 @@ public class Host {
 			System.out.println("collison occured with Packet: " + ack);
 			throw e;
 		}
+		
 	}
 
 
@@ -191,7 +196,6 @@ public class Host {
 			timeoutCounter = 0;
 			isWaitingTimeout = false;
 			isBackOff = false;
-			BackCounter = 0;
 			buff.decrement();
 			if(isFrameToSend())
 				repetitionCount = 1;
@@ -204,13 +208,15 @@ public class Host {
 			
 		}
 		
+		Main.Throughput += frame.getSize();
+		
 	}
 
 	private void initSIFS() {
-		this.SIFSCounter = (int)(5 * (100*Main.DEFINITION));		
+		this.SIFSCounter = (int)(5 * 100*Main.DEFINITION);		
 	}
 	
 	private void initDIFS() {
-		this.DIFSCounter = (int)(10 * (100*Main.DEFINITION));		
+		this.DIFSCounter = (int)(10 * 100*Main.DEFINITION);		
 	}
 }
