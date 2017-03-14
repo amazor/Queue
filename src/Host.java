@@ -52,7 +52,7 @@ public class Host {
 			int j = tickCounter % Main.NUM_HOSTS;
 			if (j == hostID)
 				j++;
-			if (j > Main.NUM_HOSTS){ 
+			if (j >= Main.NUM_HOSTS){ 
 				j-=3;
 			}
 			Frame theFrame = new Frame(hostID,(j));
@@ -100,6 +100,7 @@ public class Host {
 				} else { // it is the first instance
 					if(sharedBus.isIdle()){
 						isDIFS = true;
+						initDIFS();
 						
 						// Set the DIFS counter here in TICKS
 					}
