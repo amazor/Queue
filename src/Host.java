@@ -39,7 +39,7 @@ public class Host {
 	//		arrivalEvents = new int[(int) (1.5*Main.SIM_TIME)];    // The size of this array determines the total number of Events that will ever occur
 			arrivalEvents = new ArrayList<Integer>();
 			arrivalEvents.add((int) (randomArrival()*Main.conversionFactor));
-			for(int index = 1; index < Main.endTime/10; index++){ 
+			for(int index = 1; index < Main.endTime/100; index++){ 
 				arrivalEvents.add( (int) (arrivalEvents.get(index-1) + randomArrival()*Main.conversionFactor));
 			}	
 		}
@@ -130,7 +130,7 @@ public class Host {
 		return buff.getCount() != 0;
 	}
 	
-	private void sendFrame() {
+	private void sendFrame() throws BufferOutOfBoundsException {
 		System.out.println("Host: " + hostID + " Sent Frame" + buff.peek());
 		isWaitingTimeout = true;
 		initTimeout();
@@ -138,8 +138,11 @@ public class Host {
 			sharedBus.insertFrame((Frame)(buff.peek()));
 		} catch (BufferOutOfBoundsException e) {
 			System.out.println("collison occured with Packet:" + (Frame)(buff.peek()));
+			throw e;
 		} catch (NullPointerException e ){
 			System.out.println("PROBLEM");
+			e.printStackTrace();
+			System.exit(1);
 		}
 	}
 
@@ -157,6 +160,7 @@ public class Host {
 			sharedBus.insertFrame(ack);
 		} catch (BufferOutOfBoundsException e) {
 			System.out.println("collison occured with Packet: " + ack);
+			throw e;
 		}
 	}
 
