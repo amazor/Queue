@@ -143,6 +143,7 @@ public class Host {
 			sharedBus.insertFrame((Frame)(buff.peek()));
 			
 			Main.queueDelay += (tickCounter  - arrivalEvents.get(lastArrival));
+			lastArrival++;
 			
 		} catch (BufferOutOfBoundsException e) {
 			System.out.println("collison occured with Packet:" + (Frame)(buff.peek()));
