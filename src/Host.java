@@ -67,7 +67,14 @@ public class Host {
 				BackCounter--;
 				if(BackCounter <= 0){
 					isBackOff = false;
-					sendFrame(); //does not pop buff
+					try{
+						sendFrame(); //does not pop buff
+					} catch (NullPointerException e) {
+						e.printStackTrace();
+						System.out.println("BACKOFF TIME: " + BackCounter);
+						System.exit(1);
+					}
+
 				}
 			}
 		} else if (isWaitingTimeout){
@@ -124,6 +131,8 @@ public class Host {
 			sharedBus.insertFrame((Frame)(buff.peek()));
 		} catch (BufferOutOfBoundsException e) {
 			System.out.println("collison occured with Packet:" + (Frame)(buff.peek()));
+		} catch (NullPointerException e ){
+			System.out.println("PROBLEM");
 		}
 	}
 
@@ -151,7 +160,7 @@ public class Host {
 
 
 	public void initBackoffCounter(){
-		this.BackCounter = rand.nextInt()*T;
+		this.BackCounter = (int)(rand.nextDouble()*T * repetitionCount + 1);
 		//needs to implement repetitioncounter
 		//needs to implement backoff time from distrinution
 		
@@ -165,6 +174,7 @@ public class Host {
 		if(frame instanceof Ack){
 			System.out.println("Host: " + hostID + " Recieved ACK " + frame);
 			timeoutCounter = 0;
+			isWaitingTimeout = false;
 			buff.decrement();
 			if(isFrameToSend())
 				repetitionCount = 1;
