@@ -127,20 +127,24 @@ public class Host {
 	
 
 	public boolean isFrameToSend(){
-		return buff.getCount() != 0;
+		return buff.getCount() > 0;
 	}
 	
 	private void sendFrame() throws BufferOutOfBoundsException {
 		System.out.println("Host: " + hostID + " Sent Frame" + buff.peek());
-		isWaitingTimeout = true;
 		initTimeout();
 		try {
 			sharedBus.insertFrame((Frame)(buff.peek()));
+			isWaitingTimeout = true;
 		} catch (BufferOutOfBoundsException e) {
 			System.out.println("collison occured with Packet:" + (Frame)(buff.peek()));
 			throw e;
 		} catch (NullPointerException e ){
 			System.out.println("PROBLEM");
+			System.out.println(isDIFS);
+			System.out.println(isBackOff);
+			System.out.println(isWaitingTimeout);
+			System.out.println(this.isFrameToSend());
 			e.printStackTrace();
 			System.exit(1);
 		}
@@ -186,6 +190,8 @@ public class Host {
 			System.out.println("Host: " + hostID + " Recieved ACK " + frame);
 			timeoutCounter = 0;
 			isWaitingTimeout = false;
+			isBackOff = false;
+			BackCounter = 0;
 			buff.decrement();
 			if(isFrameToSend())
 				repetitionCount = 1;
@@ -201,10 +207,10 @@ public class Host {
 	}
 
 	private void initSIFS() {
-		this.SIFSCounter = (int)(5 * (100/Main.DEFINITION));		
+		this.SIFSCounter = (int)(5 * (100*Main.DEFINITION));		
 	}
 	
 	private void initDIFS() {
-		this.DIFSCounter = (int)(10 * (100/Main.DEFINITION));		
+		this.DIFSCounter = (int)(10 * (100*Main.DEFINITION));		
 	}
 }
