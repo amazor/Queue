@@ -13,6 +13,12 @@ public class Main {
 	public static WiFiSystem wifi;
 	
 	
+	public static double Throughput = 0;
+	public static double transDelay = 0;
+	public static double queueDelay = 0; // In Ticks
+	public static double avgDelay = 0;
+
+	
 	private static int collisions;
 	
 	
@@ -34,6 +40,7 @@ public class Main {
 	private static void init() {
 		globalTime = 0;
 		endTime =  (int) (conversionFactor * SIM_TIME*1000);
+		System.out.println("Et =" + endTime);
 		wifi = new WiFiSystem(NUM_HOSTS, SPEED);
 		}
 
@@ -41,6 +48,17 @@ public class Main {
 		System.out.println("STATISTICS");
 		System.out.println("Collisions: " + collisions);
 
+		System.out.println("Throughput = " + Throughput/SIM_TIME);
+		System.out.println("Transmission Delay = " + transDelay);
+		//Convert Que Delay to S
+		queueDelay  = queueDelay /(1000*conversionFactor);
+		System.out.println("Queuing Delay = " + queueDelay);
+		avgDelay = (queueDelay + transDelay)/ NUM_HOSTS;
+		System.out.println("Average Delay = " + avgDelay);
+		
+		
+		
+		
 		
 	}
 
