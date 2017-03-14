@@ -147,7 +147,7 @@ public class Host {
 
 
 	public void initBackoffCounter(){
-		this.BackCounter = 50;
+		this.BackCounter = rand.nextInt()*T;
 		//needs to implement repetitioncounter
 		//needs to implement backoff time from distrinution
 		
