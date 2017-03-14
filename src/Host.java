@@ -137,7 +137,11 @@ public class Host {
 	private void sendAck() throws BufferOutOfBoundsException {
 		Ack ack = (Ack)ackBuffer.decrement();
 		System.out.println("Host: " + hostID + " Sent ACK " + ack );
-		sharedBus.insertFrame(ack);
+		try {
+			sharedBus.insertFrame(ack);
+		} catch (BufferOutOfBoundsException e) {
+			System.out.println("collison occured with Packet: " + ack);
+		}
 	}
 
 
