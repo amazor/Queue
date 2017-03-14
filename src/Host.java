@@ -49,7 +49,13 @@ public class Host {
 		
 		//Adds an arrival event to the Buffer
 		if(arrivalEvents.get(ptr) == tickCounter){
-			Frame theFrame = new Frame(hostID,(tickCounter % Main.NUM_HOSTS) );
+			int j = tickCounter % Main.NUM_HOSTS;
+			if (j == hostID)
+				j++;
+			if (j > Main.NUM_HOSTS){ 
+				j-=3;
+			}
+			Frame theFrame = new Frame(hostID,(j));
 			buff.increment(theFrame);
 			ptr++;
 		}
@@ -114,7 +120,7 @@ public class Host {
 
 		double lambda = .1;        //As Lambda increases the time between arrivals decreases
 		double u = rand.nextDouble();
-		return ((-1/lambda)*Math.log(1-u));
+		return ((-1/Main.LAMBDA)*Math.log(1-u));
 	}
 	
 	
@@ -189,8 +195,11 @@ public class Host {
 		
 	}
 
-
 	private void initSIFS() {
-		this.SIFSCounter = 25;		
+		this.SIFSCounter = (int)(5 * (100/Main.DEFINITION));		
+	}
+	
+	private void initDIFS() {
+		this.DIFSCounter = (int)(10 * (100/Main.DEFINITION));		
 	}
 }
