@@ -7,7 +7,7 @@ public class Ack extends Frame {
 	}
 	
 	public String toString(){
-		return "ACK FRAME -- Src:" + getSrcID() + " Dest: " + getDestID();
+		return "(ACK FRAME -- Src:" + getSrcID() + " Dest: " + getDestID()+")";
 	}
 
 }

@@ -29,7 +29,7 @@ public class Frame extends Packet {
 	}
 	
 	public String toString(){
-		return "Src:" + srcHost + " Dest: " + destHost;
+		return "(Src:" + srcHost + " Dest: " + destHost + ")";
 	}
 	
 	private int randomSize(){		//REMBER THIS IS IN BYTES

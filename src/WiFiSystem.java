@@ -7,8 +7,8 @@ public class WiFiSystem {
 	
 	public WiFiSystem(int numHosts, double speed){
 		this.numHosts = numHosts;
-		bus = new Bus(hosts, speed);
 		hosts = new Host[numHosts];
+		bus = new Bus(hosts, speed);
 		for(int i = 0; i < numHosts; i++){
 			hosts[i] = new Host(bus);
 		}

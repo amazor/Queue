@@ -1,5 +1,6 @@
 import mm1.*;
 
+import java.util.ArrayList;
 import java.util.Queue;
 import java.util.Random;
 
@@ -20,27 +21,35 @@ public class Host {
 	private Buffer buff;
 	private Buffer ackBuffer;
 	
-<<<<<<< HEAD
+
 	int tickCounter = 0;
 	int ptr = 0;
-	private Queue<Packet> arrivals;
-	private double[] arrivalEvents;
+	private ArrayList<Integer> arrivalEvents;
 	private static Random rand = new Random();
-=======
-	
-	int tickCounter = 0;
-	int ptr = 0;
-	private double[] arrivalEvents;
-	private Random rand = new Random();
->>>>>>> 7d04cf9a7502e392f31732b92c55ffe7f6a9eb18
-	
+	private static int hostCount = 0;
+	private int hostID;
+	public Host(Bus bus){
+			buff = new Buffer(-1);
+			ackBuffer = new Buffer(-1);
+			sharedBus = bus;
+			repetitionCount = 0;
+			hostID = hostCount++;
+			
+			//Made it an array after all, so we could have a record of when items were added to the Buffer
+	//		arrivalEvents = new int[(int) (1.5*Main.SIM_TIME)];    // The size of this array determines the total number of Events that will ever occur
+			arrivalEvents = new ArrayList<Integer>();
+			arrivalEvents.add((int) (randomArrival()*Main.conversionFactor));
+			for(int index = 1; index < Main.endTime/10; index++){ 
+				arrivalEvents.add( (int) (arrivalEvents.get(index-1) + randomArrival()*Main.conversionFactor));
+			}	
+		}
+
 	public void tick() throws BufferOutOfBoundsException{
 		tickCounter ++;
-		int ITSOWNNUMBER = 0;
 		
 		//Adds an arrival event to the Buffer
-		if(arrivalEvents[ptr] == tickCounter){
-			Frame theFrame = new Frame(ITSOWNNUMBER,(tickCounter % Main.NUM_HOSTS) );
+		if(arrivalEvents.get(ptr) == tickCounter){
+			Frame theFrame = new Frame(hostID,(tickCounter % Main.NUM_HOSTS) );
 			buff.increment(theFrame);
 			ptr++;
 		}
@@ -49,21 +58,21 @@ public class Host {
 		
 		if(isDIFS){ // is it waiting on DIFS
 			DIFSCounter--;
-			if (DIFSCounter == 0){
+			if (DIFSCounter <= 0){
 				isDIFS = false;
 				sendFrame(); // does not pop buff
 			}
 		} else if(isBackOff){ //is it waiting on BackOFF
 			if(sharedBus.isIdle()){
 				BackCounter--;
-				if(BackCounter == 0){
+				if(BackCounter <= 0){
 					isBackOff = false;
 					sendFrame(); //does not pop buff
 				}
 			}
 		} else if (isWaitingTimeout){
 			timeoutCounter--;
-			if(timeoutCounter == 0){
+			if(timeoutCounter <= 0){
 				isWaitingTimeout = false;
 				repetitionCount++;
 				initBackoffCounter();
@@ -87,55 +96,28 @@ public class Host {
 		
 		if(isAckToSend()){
 			SIFSCounter--;
-			if(SIFSCounter == 0){
+			if(SIFSCounter <= 0){
 				sendAck(); //pop the ackBuffer ALWAYS
 			}
 		}
 	
 	}
 
-	public Host(Bus bus){
-		buff = new Buffer(-1);
-		ackBuffer = new Buffer(-1);
-		sharedBus = bus;
-		repetitionCount = 0;
-		
-		//Made it an array after all, so we could have a record of when items were added to the Buffer
-<<<<<<< HEAD
-		arrivalEvents = new double[(int) (1.5*Main.SIM_TIME)];    // The size of this array determines the total number of Events that will ever occur
-		arrivalEvents[0] = randomArrival()*1000/Main.DEFINITION;
-		for(int index = 1; index < arrivalEvents.length; index++){ 
-			arrivalEvents[index] = arrivalEvents[index-1] + randomArrival();
-		}	
-	}
-	
 	private static double randomArrival(){
-=======
-		arrivalEvents = new double[1.5*SIM_TIME];    // The size of this array determines the total number of Events that will ever occur
-		arrivalEvents[0] = randomArrival()*1000/(DEFINITION);
-		for(int index = 1; index < arrivalEvents.length; index++){ 
-			arrivalEvents[index] = arrivalEvents[index-1] + randArrival();
-		}
-	}
-	
-	private static double randomomArrival(){
->>>>>>> 7d04cf9a7502e392f31732b92c55ffe7f6a9eb18
-		double lambda = .9;        //As Lambda increases the time between arrivals decreases
+
+		double lambda = .1;        //As Lambda increases the time between arrivals decreases
 		double u = rand.nextDouble();
 		return ((-1/lambda)*Math.log(1-u));
 	}
 	
 	
-<<<<<<< HEAD
 
-=======
->>>>>>> 7d04cf9a7502e392f31732b92c55ffe7f6a9eb18
 	public boolean isFrameToSend(){
 		return buff.getCount() != 0;
 	}
 	
 	private void sendFrame() {
-		System.out.println("Frame sent");
+		System.out.println("Host: " + hostID + " Sent Frame" + buff.peek());
 		isWaitingTimeout = true;
 		initTimeout();
 		try {
@@ -153,7 +135,9 @@ public class Host {
 
 
 	private void sendAck() throws BufferOutOfBoundsException {
-		sharedBus.insertFrame((Ack)(ackBuffer.decrement()));
+		Ack ack = (Ack)ackBuffer.decrement();
+		System.out.println("Host: " + hostID + " Sent ACK " + ack );
+		sharedBus.insertFrame(ack);
 	}
 
 
@@ -163,7 +147,7 @@ public class Host {
 
 
 	public void initBackoffCounter(){
-		
+		this.BackCounter = 50;
 		//needs to implement repetitioncounter
 		//needs to implement backoff time from distrinution
 		
@@ -175,6 +159,7 @@ public class Host {
 
 	public void recieveFrame(Frame frame) throws BufferOutOfBoundsException {
 		if(frame instanceof Ack){
+			System.out.println("Host: " + hostID + " Recieved ACK " + frame);
 			timeoutCounter = 0;
 			buff.decrement();
 			if(isFrameToSend())
@@ -182,6 +167,7 @@ public class Host {
 			else 
 				repetitionCount = 0;
 		} else { // Receives frame from another host
+			System.out.println("Host: " + hostID + " Recieved Frame " + frame);
 			initSIFS();
 			ackBuffer.increment(new Ack(frame.getDestID(), frame.getSrcID()));
 			
@@ -191,7 +177,6 @@ public class Host {
 
 
 	private void initSIFS() {
-		// TODO Auto-generated method stub
-		
+		this.SIFSCounter = 25;		
 	}
 }
