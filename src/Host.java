@@ -44,7 +44,13 @@ public class Host {
 		}
 
 	private void addArrivalEvents(int sizeOfCurrent) {
-		for(int index = sizeOfCurrent; index < Main.endTime/100; index++){ 
+		if(Main.endTime <= 100){
+			for(int index = sizeOfCurrent; index < sizeOfCurrent + 100; index++){ 
+				arrivalEvents.add( (int) (arrivalEvents.get(index-1) + randomArrival()*Main.conversionFactor));
+			}	
+	
+		}
+		for(int index = sizeOfCurrent; index < sizeOfCurrent + Main.endTime/100; index++){ 
 			arrivalEvents.add( (int) (arrivalEvents.get(index-1) + randomArrival()*Main.conversionFactor));
 		}	
 		
