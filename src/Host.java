@@ -40,15 +40,22 @@ public class Host {
 	//		arrivalEvents = new int[(int) (1.5*Main.SIM_TIME)];    // The size of this array determines the total number of Events that will ever occur
 			arrivalEvents = new ArrayList<Integer>();
 			arrivalEvents.add((int) (randomArrival()*Main.conversionFactor));
-			for(int index = 1; index < Main.endTime/100; index++){ 
-				arrivalEvents.add( (int) (arrivalEvents.get(index-1) + randomArrival()*Main.conversionFactor));
-			}	
+			addArrivalEvents(1);
 		}
+
+	private void addArrivalEvents(int sizeOfCurrent) {
+		for(int index = sizeOfCurrent; index < Main.endTime/100; index++){ 
+			arrivalEvents.add( (int) (arrivalEvents.get(index-1) + randomArrival()*Main.conversionFactor));
+		}	
+		
+	}
 
 	public void tick() throws BufferOutOfBoundsException{
 		tickCounter ++;
 		
 		//Adds an arrival event to the Buffer
+		if(ptr >= arrivalEvents.size())
+			addArrivalEvents(arrivalEvents.size());
 		if(arrivalEvents.get(ptr) == tickCounter){
 			int j = tickCounter % Main.NUM_HOSTS;
 			if (j == hostID)
