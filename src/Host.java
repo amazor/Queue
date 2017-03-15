@@ -23,7 +23,6 @@ public class Host {
 	private int lastArrival = 0;
 	
 	private int tempQueueDelay = 0;
-	
 
 	int tickCounter = 0;
 	int ptr = 0;
