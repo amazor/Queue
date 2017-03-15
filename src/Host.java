@@ -124,9 +124,9 @@ public class Host {
 
 	private static double randomArrival(){
 
-		double lambda = .1;        //As Lambda increases the time between arrivals decreases
+		//double lambda = .1;        //As Lambda increases the time between arrivals decreases
 		double u = rand.nextDouble();
-		return ((-1/Main.LAMBDA)*Math.log(1-u));
+		return ((-1/Main.LAMBDA_Arrive)*Math.log(1-u));
 	}
 	
 	
