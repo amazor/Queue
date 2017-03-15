@@ -33,7 +33,7 @@ public class Bus extends Buffer{
 	public void insertFrame(Frame frame) throws BufferOutOfBoundsException{
 		super.increment(frame);
 		busyCountdown = (int) (Main.conversionFactor * frame.getSize() *8 /capacity);
-		Main.transDelay += busyCountdown/Main.conversionFactor;
+		Main.transDelay += busyCountdown/Main.conversionFactor;  //THIS IS IN MS!!!!
 	}
 	
 	public Frame popFrame() throws BufferOutOfBoundsException{
