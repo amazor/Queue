@@ -210,6 +210,7 @@ public class Host {
 		}
 		
 		Main.Throughput += frame.getSize();
+		Main.numPackets++;
 		
 	}
 

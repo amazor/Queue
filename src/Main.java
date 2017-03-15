@@ -5,7 +5,7 @@ public class Main {
 	public static final int NUM_HOSTS = 10;
 	public static final double LAMBDA_Arrive = 0.9;
 	public static final double LAMBDA_SIZE = 0.9;
-	public static final double SIM_TIME = 10; //in seconds
+	public static final double SIM_TIME = 1; //in seconds
 	public static final double SPEED = 11; //in mbps
 	
 	public static int globalTime;
@@ -18,6 +18,7 @@ public class Main {
 	public static double transDelay = 0;
 	public static double queueDelay = 0; // In Ticks
 	public static double avgDelay = 0;
+	public static int numPackets =  0;
 
 	
 	private static int collisions;
@@ -50,11 +51,11 @@ public class Main {
 		System.out.println("Collisions: " + collisions);
 
 		System.out.println("Throughput = " + Throughput/SIM_TIME);
-		System.out.println("Transmission Delay = " + transDelay);
+		System.out.println("Transmission Delay = " + transDelay* conversionFactor);
 		//Convert Que Delay to S
 		queueDelay  = queueDelay /(1000*conversionFactor);
 		System.out.println("Queuing Delay = " + queueDelay);
-		avgDelay = (queueDelay + transDelay)/ NUM_HOSTS;
+		avgDelay = (queueDelay + transDelay)/ numPackets;
 		System.out.println("Average Delay = " + avgDelay);
 		
 		
