@@ -22,6 +22,8 @@ public class Host {
 	private Buffer ackBuffer;
 	private int lastArrival = 0;
 	
+	private int tempQueueDelay = 0;
+	
 
 	int tickCounter = 0;
 	int ptr = 0;
@@ -84,7 +86,8 @@ public class Host {
 			DIFSCounter--;
 			if (DIFSCounter == 0){
 				isDIFS = false;
-				sendFrame(); // does not pop buff
+				sendFrame();
+				 // does not pop buff
 			}
 		} else if(isBackOff){ //is it waiting on BackOFF
 			if(sharedBus.isIdle()){
@@ -112,6 +115,8 @@ public class Host {
 					isBackOff = false;
 					isDIFS = false;
 					buff.decrement();
+					//System.out.println("Is Wait Buffer: " + buff.getCount());
+					lastArrival++;
 					if(isFrameToSend())
 						repetitionCount = 1;
 					else 
@@ -158,7 +163,7 @@ public class Host {
 	
 
 	public boolean isFrameToSend(){
-		return buff.getCount() != 0;
+		return buff.getCount() > 0;
 	}
 	
 	private void sendFrame() throws BufferOutOfBoundsException {
@@ -168,8 +173,8 @@ public class Host {
 		try {
 			sharedBus.insertFrame((Frame)(buff.peek()));
 			
-			Main.queueDelay += (tickCounter  - arrivalEvents.get(lastArrival));
-			lastArrival++;
+			tempQueueDelay = (tickCounter  - arrivalEvents.get(lastArrival));
+			//lastArrival++;
 			
 		} catch (BufferOutOfBoundsException e) {
 			System.out.println("collison occured with Packet:" + (Frame)(buff.peek()));
@@ -219,11 +224,15 @@ public class Host {
 
 	public void recieveFrame(Frame frame) throws BufferOutOfBoundsException {
 		if(frame instanceof Ack){
+			Main.queueDelay += tempQueueDelay;
 			System.out.println("Host: " + hostID + " Recieved ACK " + frame);
 			timeoutCounter = 0;
 			isWaitingTimeout = false;
 			isBackOff = false;
 			buff.decrement();
+			isDIFS = false;
+			//System.out.println("Rcv Frame Buffer: " + buff.getCount());
+			lastArrival++;
 			if(isFrameToSend())
 				repetitionCount = 1;
 			else 
