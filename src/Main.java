@@ -53,13 +53,12 @@ public class Main {
 		System.out.println("STATISTICS");
 		System.out.println("Collisions: " + collisions);
 
-		System.out.println("Throughput = " + Throughput/SIM_TIME);
-		System.out.println("Transmission Delay = " + transDelay);
-		//Convert Que Delay to S
-		queueDelay  = queueDelay /(1000*conversionFactor);
-		System.out.println("Queuing Delay = " + queueDelay);
+		System.out.println("Throughput = " + Throughput/SIM_TIME  + " bytes/sec");
+		System.out.println("Total Transmission Delay = " + transDelay + " msec"); 
+		queueDelay  = queueDelay /(conversionFactor);  //Converts Que From ticks to mSec
+		System.out.println("Total Queuing Delay = " + queueDelay + " msec");
 		avgDelay = (queueDelay + transDelay)/ numPkts;
-		System.out.println("Average Delay = " + avgDelay);
+		System.out.println("Total Average Delay = " + avgDelay + " msec");
 		
 		
 		
