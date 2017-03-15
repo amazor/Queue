@@ -32,8 +32,8 @@ public class Bus extends Buffer{
 	
 	public void insertFrame(Frame frame) throws BufferOutOfBoundsException{
 		super.increment(frame);
-		busyCountdown = (int) (Main.conversionFactor * frame.getSize()/capacity);
-		Main.transDelay += frame.getSize() *8 /(capacity);
+		busyCountdown = (int) (Main.conversionFactor * frame.getSize() *8 /capacity);
+		Main.transDelay += busyCountdown/Main.conversionFactor;
 	}
 	
 	public Frame popFrame() throws BufferOutOfBoundsException{
