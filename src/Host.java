@@ -106,8 +106,21 @@ public class Host {
 			if(timeoutCounter <= 0){
 				isWaitingTimeout = false;
 				repetitionCount++;
+				if(repetitionCount >= 4){
+					timeoutCounter = 0;
+					isWaitingTimeout = false;
+					isBackOff = false;
+					isDIFS = false;
+					buff.decrement();
+					if(isFrameToSend())
+						repetitionCount = 1;
+					else 
+						repetitionCount = 0;
+
+				} else {
 				initBackoffCounter();
 				isBackOff = true;
+				}
 			}
 		} else { //it is NOT waiting for anything
 			
