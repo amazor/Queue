@@ -21,6 +21,7 @@ public class Main {
 	public static double transDelay = 0;
 	public static double queueDelay = 0; // In Ticks
 	public static double avgDelay = 0;
+	public static int numPkts = 0;
 
 	
 	private static int collisions;
@@ -57,7 +58,7 @@ public class Main {
 		//Convert Que Delay to S
 		queueDelay  = queueDelay /(1000*conversionFactor);
 		System.out.println("Queuing Delay = " + queueDelay);
-		avgDelay = (queueDelay + transDelay)/ NUM_HOSTS;
+		avgDelay = (queueDelay + transDelay)/ numPkts;
 		System.out.println("Average Delay = " + avgDelay);
 		
 		
