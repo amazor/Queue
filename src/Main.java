@@ -9,6 +9,7 @@ public class Main {
 	public static final double SIM_TIME = 10; //in seconds
 	public static final double SPEED = 11*conversionFactor/10; //in mbps
 	public static final double TIMEOUT = 5; //in ms      //CHANGED
+	public static final int T = 5;		//Used in Backoff Time	
 	
 	public static int globalTime;
 	
