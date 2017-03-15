@@ -12,7 +12,7 @@ public class Host {
 	
 	int DIFSCounter = 0;		//DIFS to TICKS
  	int BackCounter = 0;
-	private static int T = 5;    //Vary T in the random backoff algorithm to find out the effect of T on throughput and average network delay by keeping λ constant.
+	//private static int T = 5;    //Vary T in the random backoff algorithm to find out the effect of T on throughput and average network delay by keeping λ constant.
 	
 	private int SIFSCounter = 0;   //SIFS to TICKS
 	private int timeoutCounter = 0;  //Set this to Largest Pckt + DIFS + SIFS   
@@ -157,7 +157,7 @@ public class Host {
 
 
 	private void initTimeout() {
-		timeoutCounter = 120;  //120 = 1544*8/(11*10)
+		timeoutCounter =  (int)(Main.TIMEOUT * Main.conversionFactor);  //120 = 1544*8/(11*10)
 		//timeoutCounter = timeourCounter + DIFS + SIFS; 
 	}
 
@@ -181,7 +181,7 @@ public class Host {
 
 
 	public void initBackoffCounter(){
-		this.BackCounter = (int)(rand.nextDouble()*T * repetitionCount + 1);
+		this.BackCounter = (int)(rand.nextDouble()*Main.T * repetitionCount + 1);
 		//needs to implement repetitioncounter
 		//needs to implement backoff time from distrinution
 		
@@ -210,15 +210,14 @@ public class Host {
 		}
 		
 		Main.Throughput += frame.getSize();
-		Main.numPackets++;
 		
 	}
 
 	private void initSIFS() {
-		this.SIFSCounter = (int)(5 * 100*Main.DEFINITION);		
+		this.SIFSCounter = (int)(5 * Main.conversionFactor);		//Changed
 	}
 	
 	private void initDIFS() {
-		this.DIFSCounter = (int)(10 * 100*Main.DEFINITION);		
+		this.DIFSCounter = (int)(10 * Main.conversionFactor);		//Changed
 	}
 }
