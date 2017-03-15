@@ -4,6 +4,7 @@ import java.util.Random;
 public class Frame extends Packet {
 	private int srcHost;
 	private int destHost;
+	private int FrameIDNum;
 	private int size;					//THIS IS IN BYTES!
 	private static Random randF = new Random();
 	
@@ -32,9 +33,9 @@ public class Frame extends Packet {
 	}
 	
 	private int randomSize(){		//REMBER THIS IS IN BYTES
-		double lambda = .1;    
+		//double lambda = .1;    
 		double u = randF.nextDouble();
-		int g = (int)((-1/Main.LAMBDA)*Math.log(1-u));
+		int g = (int)((-1/Main.LAMBDA_SIZE)*Math.log(1-u));
 		if (g < 1){ 
 			g = 1;}
 		else if (g > 1544){
